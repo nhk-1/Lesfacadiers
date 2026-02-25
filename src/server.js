@@ -3,14 +3,22 @@ const fs = require('fs/promises');
 const path = require('path');
 const { URL } = require('url');
 const querystring = require('querystring');
-const { company, services, projects, stats } = require('./data/site-content');
+const {
+  company,
+  navigation,
+  hero,
+  companySection,
+  serviceGroups,
+  projects,
+  testimonials
+} = require('./data/site-content');
 const { addMessage } = require('./utils/messages-store');
 
 const PORT = process.env.PORT || 3000;
 const publicDir = path.join(process.cwd(), 'public');
 
 function escapeHtml(value = '') {
-  return value
+  return String(value)
     .replaceAll('&', '&amp;')
     .replaceAll('<', '&lt;')
     .replaceAll('>', '&gt;')
@@ -18,11 +26,36 @@ function escapeHtml(value = '') {
     .replaceAll("'", '&#39;');
 }
 
+function renderAddress() {
+  return company.addressLines.map(line => `<p>${escapeHtml(line)}</p>`).join('');
+}
+
 function pageTemplate({ flash = '', errors = [], formData = {} }) {
-  const serviceOptions = services
+  const serviceOptions = serviceGroups
+    .flatMap(group => group.items)
     .map(
-      service =>
-        `<option value="${escapeHtml(service.title)}" ${formData.service === service.title ? 'selected' : ''}>${escapeHtml(service.title)}</option>`
+      item =>
+        `<option value="${escapeHtml(item.title)}" ${formData.service === item.title ? 'selected' : ''}>${escapeHtml(item.title)}</option>`
+    )
+    .join('');
+
+  const navHtml = navigation
+    .map(link => `<a href="#${escapeHtml(link.id)}">${escapeHtml(link.label)}</a>`)
+    .join('');
+
+  const serviceGroupsHtml = serviceGroups
+    .map(
+      group => `
+      <section id="${escapeHtml(group.id)}" class="service-group reveal">
+        <h3>${escapeHtml(group.title)}</h3>
+        <div class="cards-grid ${group.items.length === 2 ? 'two-cols' : ''}">
+          ${group.items
+            .map(
+              item => `<article class="service-card"><h4>${escapeHtml(item.title)}</h4><p>${escapeHtml(item.description)}</p></article>`
+            )
+            .join('')}
+        </div>
+      </section>`
     )
     .join('');
 
@@ -31,8 +64,8 @@ function pageTemplate({ flash = '', errors = [], formData = {} }) {
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <meta name="description" content="Les Façadiers du Nord, spécialistes du ravalement de façade, isolation thermique et finitions dans le Nord." />
-  <title>${escapeHtml(company.name)} | Ravalement & Isolation</title>
+  <meta name="description" content="${escapeHtml(company.tagline)}" />
+  <title>${escapeHtml(company.name)} | Façades, Toiture, Isolation</title>
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
@@ -42,63 +75,117 @@ function pageTemplate({ flash = '', errors = [], formData = {} }) {
 <header class="header">
   <div class="container nav">
     <div class="logo">LFN</div>
-    <nav>
-      <a href="#services">Services</a>
-      <a href="#realisations">Réalisations</a>
-      <a href="#contact" class="btn-secondary">Devis gratuit</a>
-    </nav>
+    <nav>${navHtml}<a href="#contact" class="btn-secondary">Devis gratuit</a></nav>
   </div>
 </header>
-<main>
-<section class="hero"><div class="container hero-grid"><div class="reveal">
-  <span class="eyebrow">Entreprise locale • Nord</span>
-  <h1>Refaites votre façade avec des experts exigeants.</h1>
-  <p>${escapeHtml(company.tagline)}. Des interventions durables, esthétiques et garanties pour votre habitation.</p>
-  <div class="hero-actions"><a href="#contact" class="btn-primary">Demander un devis</a><a href="#realisations" class="btn-link">Voir nos réalisations</a></div>
-</div>
-<div class="hero-cards reveal delay-1">${stats
-    .map(stat => `<article class="stat-card"><p class="stat-value">${escapeHtml(stat.value)}</p><p>${escapeHtml(stat.label)}</p></article>`)
-    .join('')}</div></div></section>
 
-<section id="services" class="section container"><div class="section-title reveal"><span>Nos services</span><h2>Des prestations complètes pour votre façade</h2></div><div class="cards-grid">${services
-    .map(
-      (service, i) => `<article class="service-card reveal delay-${(i % 3) + 1}"><p class="icon">${escapeHtml(service.icon)}</p><h3>${escapeHtml(
-        service.title
-      )}</h3><p>${escapeHtml(service.description)}</p></article>`
-    )
-    .join('')}</div></section>
+<main id="accueil">
+  <section class="hero">
+    <div class="container hero-grid">
+      <div class="reveal">
+        <span class="eyebrow">Entreprise locale • Oise & Val d’Oise</span>
+        <h1>${escapeHtml(hero.title)}</h1>
+        <p>${escapeHtml(hero.intro)}</p>
+        <div class="hero-actions">
+          <a href="#contact" class="btn-primary">${escapeHtml(hero.cta)}</a>
+          <a href="#realisations" class="btn-link">Voir nos réalisations</a>
+        </div>
+      </div>
+      <div class="hero-cards reveal delay-1">
+        <article class="stat-card"><p class="stat-value">${escapeHtml(company.yearsExperience)}</p><p>ans d’expérience</p></article>
+        <article class="stat-card"><p class="stat-value">60/95</p><p>Zones d’intervention</p></article>
+        <article class="stat-card"><p class="stat-value">Façades</p><p>Nettoyage, ravalement, rejointoiement</p></article>
+        <article class="stat-card"><p class="stat-value">Toiture</p><p>Couverture, zinguerie, isolation</p></article>
+      </div>
+    </div>
+  </section>
 
-<section id="realisations" class="section section-alt"><div class="container"><div class="section-title reveal"><span>Nos réalisations</span><h2>Un aperçu de nos derniers chantiers</h2></div><div class="projects-grid">${projects
-    .map(
-      (project, i) => `<article class="project-card reveal delay-${(i % 3) + 1}"><img src="${escapeHtml(project.image)}" alt="${escapeHtml(
-        project.title
-      )}" loading="lazy" /><div class="project-content"><small>${escapeHtml(project.category)}</small><h3>${escapeHtml(project.title)}</h3><p>${escapeHtml(
-        project.description
-      )}</p></div></article>`
-    )
-    .join('')}</div></div></section>
+  <section id="societe" class="section container">
+    <div class="section-title reveal"><span>Société</span><h2>${escapeHtml(companySection.title)}</h2></div>
+    <div class="prose reveal delay-1">${companySection.paragraphs.map(text => `<p>${escapeHtml(text)}</p>`).join('')}</div>
+  </section>
 
-<section id="contact" class="section container"><div class="section-title reveal"><span>Contact</span><h2>Parlons de votre projet de rénovation</h2></div>
-${flash ? `<div class="alert success">${escapeHtml(flash)}</div>` : ''}
-${errors.length ? `<div class="alert error"><ul>${errors.map(error => `<li>${escapeHtml(error)}</li>`).join('')}</ul></div>` : ''}
-<form action="/contact" method="post" class="contact-form reveal delay-1">
-<div class="input-group"><label for="name">Nom *</label><input id="name" name="name" value="${escapeHtml(formData.name || '')}" required /></div>
-<div class="input-group"><label for="email">Email *</label><input id="email" type="email" name="email" value="${escapeHtml(formData.email || '')}" required /></div>
-<div class="input-group"><label for="phone">Téléphone</label><input id="phone" name="phone" value="${escapeHtml(formData.phone || '')}" /></div>
-<div class="input-group"><label for="service">Service souhaité</label><select id="service" name="service"><option value="">Sélectionnez</option>${serviceOptions}</select></div>
-<div class="input-group full-width"><label for="message">Votre message *</label><textarea id="message" name="message" rows="6" required>${escapeHtml(
-    formData.message || ''
-  )}</textarea></div>
-<button type="submit" class="btn-primary">Envoyer ma demande</button>
-</form></section>
+  <section class="section section-alt">
+    <div class="container">
+      <div class="section-title reveal"><span>Prestations</span><h2>Tous les contenus de services du site</h2></div>
+      ${serviceGroupsHtml}
+    </div>
+  </section>
+
+  <section id="realisations" class="section container">
+    <div class="section-title reveal"><span>Réalisations</span><h2>Un aperçu de nos chantiers</h2></div>
+    <div class="projects-grid">
+      ${projects
+        .map(
+          (project, i) => `<article class="project-card reveal delay-${(i % 3) + 1}"><img src="${escapeHtml(project.image)}" alt="${escapeHtml(
+            project.title
+          )}" loading="lazy" /><div class="project-content"><small>${escapeHtml(project.category)}</small><h3>${escapeHtml(project.title)}</h3><p>${escapeHtml(
+            project.description
+          )}</p></div></article>`
+        )
+        .join('')}
+    </div>
+  </section>
+
+  <section id="avis" class="section section-alt">
+    <div class="container">
+      <div class="section-title reveal"><span>Avis</span><h2>Ce qu’ils disent de nous</h2></div>
+      <div class="cards-grid two-cols">
+        ${testimonials
+          .map(
+            (item, i) => `<article class="service-card reveal delay-${(i % 2) + 1}"><h4>${escapeHtml(item.author)} • ${escapeHtml(
+              item.date
+            )}</h4><p>“${escapeHtml(item.quote)}”</p></article>`
+          )
+          .join('')}
+      </div>
+      <p class="contact-cta">Voir les avis Google MyBusiness pour plus de retours clients.</p>
+    </div>
+  </section>
+
+  <section id="contact" class="section container">
+    <div class="section-title reveal"><span>Contact</span><h2>Demandez votre devis pour vos travaux à Beauvais</h2></div>
+
+    <div class="contact-layout reveal delay-1">
+      <aside class="contact-card">
+        <h3>${escapeHtml(company.legalName)}</h3>
+        ${renderAddress()}
+        <p><strong>Tél :</strong> ${escapeHtml(company.phone)}</p>
+        <p><strong>Email :</strong> ${escapeHtml(company.email)}</p>
+        <p><strong>Zone d’intervention :</strong> ${escapeHtml(company.zones.join(', '))}</p>
+      </aside>
+
+      <div>
+        ${flash ? `<div class="alert success">${escapeHtml(flash)}</div>` : ''}
+        ${errors.length ? `<div class="alert error"><ul>${errors.map(error => `<li>${escapeHtml(error)}</li>`).join('')}</ul></div>` : ''}
+
+        <form action="/contact" method="post" class="contact-form">
+          <div class="input-group"><label for="name">Nom *</label><input id="name" name="name" value="${escapeHtml(formData.name || '')}" required /></div>
+          <div class="input-group"><label for="email">Email *</label><input id="email" type="email" name="email" value="${escapeHtml(formData.email || '')}" required /></div>
+          <div class="input-group"><label for="phone">Téléphone</label><input id="phone" name="phone" value="${escapeHtml(formData.phone || '')}" /></div>
+          <div class="input-group"><label for="service">Service souhaité</label><select id="service" name="service"><option value="">Sélectionnez</option>${serviceOptions}</select></div>
+          <div class="input-group full-width"><label for="message">Votre message *</label><textarea id="message" name="message" rows="6" required>${escapeHtml(
+            formData.message || ''
+          )}</textarea></div>
+          <button type="submit" class="btn-primary">Envoyer ma demande</button>
+        </form>
+      </div>
+    </div>
+  </section>
 </main>
-<footer class="footer"><div class="container footer-grid"><div><h4>${escapeHtml(company.name)}</h4><p>${escapeHtml(company.tagline)}</p></div><div><h5>Contact</h5><p>Tél. ${escapeHtml(
-    company.phone
-  )}</p><p>${escapeHtml(company.email)}</p><p>${escapeHtml(company.address)}</p></div><div><h5>Navigation</h5><a href="#services">Services</a><a href="#realisations">Réalisations</a><a href="#contact">Contact</a></div></div><p class="copyright">© ${new Date().getFullYear()} ${escapeHtml(
-    company.name
-  )}. Tous droits réservés.</p></footer>
+
+<footer class="footer">
+  <div class="container footer-grid">
+    <div><h4>${escapeHtml(company.name)}</h4><p>${escapeHtml(company.tagline)}</p></div>
+    <div><h5>Liens</h5><a href="#societe">Société</a><a href="#facades">Façades</a><a href="#toiture">Toiture</a><a href="#isolations">Isolations</a><a href="#realisations">Réalisations</a><a href="#avis">Avis</a><a href="#contact">Contact</a></div>
+    <div><h5>Informations</h5><a href="https://www.les-facadiers-du-nord.fr/sitemap.php" target="_blank" rel="noreferrer">Plan du site</a><a href="https://www.les-facadiers-du-nord.fr/mentions.php" target="_blank" rel="noreferrer">Mentions légales</a></div>
+  </div>
+  <p class="copyright">© ${new Date().getFullYear()} ${escapeHtml(company.name)}. Tous droits réservés.</p>
+</footer>
+
 <script src="/js/main.js"></script>
-</body></html>`;
+</body>
+</html>`;
 }
 
 async function serveStatic(reqPath, res) {
