@@ -10,17 +10,17 @@ const company = {
 };
 
 const hero = {
-  title: 'Façades, toiture et isolation : un rendu propre, durable et soigné.',
+  title: 'Une façade transformée. Une maison valorisée.',
   intro:
-    'Depuis Beauvais, nos équipes interviennent dans l’Oise et le Val d’Oise pour rénover et protéger votre maison avec des prestations complètes.',
-  cta: 'Demander un devis'
+    'Démonstration UI orientée image : animations fluides, galerie visuelle et présentation claire de nos prestations en façade, toiture et isolation.',
+  cta: 'Lancer mon projet'
 };
 
 const companySection = {
-  title: 'Une entreprise locale, expérimentée et réactive',
+  title: 'Une équipe terrain pour vos rénovations extérieures',
   summary:
-    'Les Façadiers du Nord accompagnent vos projets de rénovation avec une méthode claire : diagnostic, conseils, exécution soignée et finitions durables.',
-  highlights: ['15+ ans d’expérience', 'Interventions Oise (60) & Val d’Oise (95)', 'Équipe façadiers, couvreurs et peintres']
+    'Nous intervenons sur vos extérieurs avec une méthode précise : diagnostic, préparation, traitement, finition. Le tout avec un rendu propre et durable.',
+  highlights: ['15+ ans d’expérience', 'Interventions Oise (60) & Val d’Oise (95)', 'Devis gratuit et conseils personnalisés']
 };
 
 const serviceGroups = [
@@ -28,88 +28,79 @@ const serviceGroups = [
     id: 'facades',
     title: 'Travaux sur façades',
     items: [
-      {
-        title: 'Nettoyage de façades',
-        description:
-          'Démoussage, nettoyage, réparation des fissures, pose de toile de renfort, application d’hydrofuge et de revêtements professionnels.'
-      },
-      {
-        title: 'Rejointoiement de façades',
-        description: 'Réfection des joints pour restaurer l’étanchéité et l’esthétique de la maçonnerie.'
-      },
-      {
-        title: 'Ravalement de façades',
-        description: 'Ravalement complet avec traitement, imperméabilisation et finition peinture.'
-      }
+      { title: 'Nettoyage de façades', description: 'Suppression des salissures, mousses et micro-organismes pour retrouver un support sain.' },
+      { title: 'Rejointoiement de façades', description: 'Réfection des joints pour renforcer l’étanchéité et l’esthétique de la maçonnerie.' },
+      { title: 'Ravalement de façades', description: 'Traitement complet et finition durable pour protéger et valoriser votre bien.' }
     ]
   },
   {
     id: 'toiture',
     title: 'Travaux sur toiture',
     items: [
-      {
-        title: 'Nettoyage et démoussage de toiture',
-        description: 'Élimination des mousses, lichens et salissures pour prolonger la durée de vie de votre couverture.'
-      },
-      {
-        title: 'Rénovation de couverture',
-        description: 'Remise en état globale des éléments de couverture pour sécuriser votre toiture.'
-      },
-      {
-        title: 'Travaux de zinguerie',
-        description: 'Pose et reprise des éléments de zinguerie pour une évacuation des eaux efficace.'
-      }
+      { title: 'Nettoyage et démoussage', description: 'Entretien approfondi de la couverture pour prolonger sa durée de vie.' },
+      { title: 'Rénovation de couverture', description: 'Remise en état ciblée des éléments abîmés ou vieillissants.' },
+      { title: 'Travaux de zinguerie', description: 'Gestion des eaux pluviales et finitions métalliques durables.' }
     ]
   },
   {
     id: 'isolations',
     title: 'Travaux d’isolations',
     items: [
-      {
-        title: 'Isolations par l’extérieur',
-        description: 'Isolation thermique par l’extérieur pour améliorer le confort et réduire les pertes énergétiques.'
-      },
-      {
-        title: 'Isolations sous toiture',
-        description: 'Isolation sous toiture pour limiter les ponts thermiques et améliorer la performance globale.'
-      }
+      { title: 'Isolations par l’extérieur', description: 'Amélioration du confort thermique et réduction des consommations.' },
+      { title: 'Isolations sous toiture', description: 'Optimisation des performances été/hiver avec traitement des ponts thermiques.' }
     ]
   }
 ];
 
 const projects = [
   {
-    title: 'Rénovation de façade – secteur Beauvais',
-    category: 'Façades',
-    description: 'Nettoyage, traitement et finition pour redonner éclat et protection durable à la façade.',
-    image: '/images/project-1.svg'
+    title: 'Rénovation de façade',
+    category: 'Beauvais',
+    description: 'Nettoyage, reprise et finition minérale.',
+    image:
+      'https://images.unsplash.com/photo-1505693416388-ac5ce068fe85?auto=format&fit=crop&w=1200&q=80'
   },
   {
-    title: 'Réfection de toiture – Oise',
-    category: 'Toiture',
-    description: 'Démoussage et rénovation de couverture pour sécuriser l’enveloppe du bâtiment.',
-    image: '/images/project-2.svg'
+    title: 'Réfection de toiture',
+    category: 'Oise',
+    description: 'Traitement complet et remise en état.',
+    image:
+      'https://images.unsplash.com/photo-1632718545026-4d5b9dd342ad?auto=format&fit=crop&w=1200&q=80'
   },
   {
-    title: 'Isolation extérieure – Val d’Oise',
-    category: 'Isolation',
-    description: 'Amélioration thermique globale avec finitions soignées et rendu moderne.',
-    image: '/images/project-3.svg'
+    title: 'Isolation extérieure',
+    category: 'Val d’Oise',
+    description: 'Performance énergétique + nouveau rendu.',
+    image:
+      'https://images.unsplash.com/photo-1599619585752-c3edb42a414c?auto=format&fit=crop&w=1200&q=80'
   }
 ];
 
+const photos = [
+  'https://images.unsplash.com/photo-1460317442991-0ec209397118?auto=format&fit=crop&w=1200&q=80',
+  'https://images.unsplash.com/photo-1600585154340-be6161a56a0c?auto=format&fit=crop&w=1200&q=80',
+  'https://images.unsplash.com/photo-1581092580497-e0d23cbdf1dc?auto=format&fit=crop&w=1200&q=80',
+  'https://images.unsplash.com/photo-1564013799919-ab600027ffc6?auto=format&fit=crop&w=1200&q=80',
+  'https://images.unsplash.com/photo-1605276374104-dee2a0ed3cd6?auto=format&fit=crop&w=1200&q=80',
+  'https://images.unsplash.com/photo-1621905252507-b35492cc74b4?auto=format&fit=crop&w=1200&q=80'
+];
+
 const illustrations = [
-  { image: '/images/illu-1.svg', alt: 'Façade rénovée et propre' },
-  { image: '/images/illu-2.svg', alt: 'Travaux de toiture' },
-  { image: '/images/illu-3.svg', alt: 'Nettoyage façade avant/après' },
-  { image: '/images/illu-4.svg', alt: 'Isolation extérieure' },
-  { image: '/images/illu-5.svg', alt: 'Intervention couverture' },
-  { image: '/images/illu-6.svg', alt: 'Finitions façade' }
+  { image: '/images/illu-1.svg', alt: 'Illustration façades' },
+  { image: '/images/illu-2.svg', alt: 'Illustration toiture' },
+  { image: '/images/illu-3.svg', alt: 'Illustration isolation' }
+];
+
+const processSteps = [
+  { title: '01 • Diagnostic', text: 'Analyse de l’état de vos façades/toitures et recommandations techniques.' },
+  { title: '02 • Préparation', text: 'Protection du chantier, nettoyage et préparation des supports.' },
+  { title: '03 • Intervention', text: 'Mise en œuvre des travaux selon vos priorités de performance et d’esthétique.' },
+  { title: '04 • Finition', text: 'Contrôle qualité et rendu final soigné.' }
 ];
 
 const testimonials = [
-  { author: 'Imen', date: 'Mai 2022', quote: 'Travail professionnel très bonne qualité.' },
-  { author: 'Salah', date: 'Août 2022', quote: 'Entreprise très professionnelle, travail soigné et propre... je recommande vivement.' }
+  { author: 'Imen', date: 'Mai 2022', quote: 'Travail professionnel, très bonne qualité.' },
+  { author: 'Salah', date: 'Août 2022', quote: 'Entreprise très professionnelle, chantier propre, je recommande vivement.' }
 ];
 
 module.exports = {
@@ -118,6 +109,8 @@ module.exports = {
   companySection,
   serviceGroups,
   projects,
+  photos,
   illustrations,
+  processSteps,
   testimonials
 };
