@@ -9,31 +9,18 @@ const company = {
   yearsExperience: '15+'
 };
 
-const navigation = [
-  { id: 'accueil', label: 'Accueil' },
-  { id: 'societe', label: 'Société' },
-  { id: 'facades', label: 'Travaux sur façades' },
-  { id: 'toiture', label: 'Travaux sur toiture' },
-  { id: 'isolations', label: 'Travaux d’isolations' },
-  { id: 'realisations', label: 'Réalisations' },
-  { id: 'avis', label: 'Avis' },
-  { id: 'contact', label: 'Contact' }
-];
-
 const hero = {
-  title: 'Travaux sur façades et toiture avec Les Façadiers du Nord à Beauvais',
+  title: 'Façades, toiture et isolation : un rendu propre, durable et soigné.',
   intro:
-    'Vous êtes à la recherche de professionnels pour vos travaux sur la façade ou sur la toiture de votre habitation dans l’Oise ou le Val d’Oise ? Les Façadiers du Nord, situés à Beauvais, effectuent vos travaux sur façade et toiture avec une réelle expérience de plus de 15 ans.',
-  cta: 'Prenez contact'
+    'Depuis Beauvais, nos équipes interviennent dans l’Oise et le Val d’Oise pour rénover et protéger votre maison avec des prestations complètes.',
+  cta: 'Demander un devis'
 };
 
 const companySection = {
-  title: 'Les Façadiers du Nord, professionnels de la façade et de la toiture à Beauvais',
-  paragraphs: [
-    'Les Façadiers du Nord vous proposent sérieux, expérience et compétences de façadiers et couvreurs pour la réalisation de vos travaux de façade et couverture dans toute l’Oise (60) et le Val d’Oise (95).',
-    'L’entreprise doit son succès au professionnalisme de sa démarche et à ses engagements auprès de ses clients : travail soigné, respect des délais, conseils techniques et solutions durables.',
-    'Nos équipes d’artisans façadiers, couvreurs et peintres sont formées pour intervenir sur des chantiers de construction, extension et rénovation.'
-  ]
+  title: 'Une entreprise locale, expérimentée et réactive',
+  summary:
+    'Les Façadiers du Nord accompagnent vos projets de rénovation avec une méthode claire : diagnostic, conseils, exécution soignée et finitions durables.',
+  highlights: ['15+ ans d’expérience', 'Interventions Oise (60) & Val d’Oise (95)', 'Équipe façadiers, couvreurs et peintres']
 };
 
 const serviceGroups = [
@@ -44,17 +31,15 @@ const serviceGroups = [
       {
         title: 'Nettoyage de façades',
         description:
-          'Démoussage, nettoyage, réparation des fissures, pose de toile de renfort, application d’hydrofuge et de revêtements professionnels pour embellir durablement vos murs extérieurs.'
+          'Démoussage, nettoyage, réparation des fissures, pose de toile de renfort, application d’hydrofuge et de revêtements professionnels.'
       },
       {
         title: 'Rejointoiement de façades',
-        description:
-          'Réfection des joints pour restaurer l’étanchéité et l’esthétique de la maçonnerie, en conservant le caractère du bâti.'
+        description: 'Réfection des joints pour restaurer l’étanchéité et l’esthétique de la maçonnerie.'
       },
       {
         title: 'Ravalement de façades',
-        description:
-          'Ravalement complet avec traitement, imperméabilisation et finition peinture pour protéger votre maison contre les agressions climatiques.'
+        description: 'Ravalement complet avec traitement, imperméabilisation et finition peinture.'
       }
     ]
   },
@@ -64,18 +49,15 @@ const serviceGroups = [
     items: [
       {
         title: 'Nettoyage et démoussage de toiture',
-        description:
-          'Élimination des mousses, lichens et salissures pour prolonger la durée de vie de votre couverture et préserver ses performances.'
+        description: 'Élimination des mousses, lichens et salissures pour prolonger la durée de vie de votre couverture.'
       },
       {
         title: 'Rénovation de couverture',
-        description:
-          'Interventions sur tuiles, éléments endommagés et remise en état globale pour sécuriser et valoriser votre toiture.'
+        description: 'Remise en état globale des éléments de couverture pour sécuriser votre toiture.'
       },
       {
         title: 'Travaux de zinguerie',
-        description:
-          'Pose et reprise des éléments de zinguerie (gouttières, descentes, finitions) pour une évacuation des eaux efficace.'
+        description: 'Pose et reprise des éléments de zinguerie pour une évacuation des eaux efficace.'
       }
     ]
   },
@@ -85,13 +67,11 @@ const serviceGroups = [
     items: [
       {
         title: 'Isolations par l’extérieur',
-        description:
-          'Isolation thermique par l’extérieur pour améliorer le confort, réduire les pertes énergétiques et rénover l’aspect de la façade.'
+        description: 'Isolation thermique par l’extérieur pour améliorer le confort et réduire les pertes énergétiques.'
       },
       {
         title: 'Isolations sous toiture',
-        description:
-          'Isolation sous toiture (dont solutions de type sarking) pour limiter les ponts thermiques et optimiser la performance été/hiver.'
+        description: 'Isolation sous toiture pour limiter les ponts thermiques et améliorer la performance globale.'
       }
     ]
   }
@@ -118,6 +98,15 @@ const projects = [
   }
 ];
 
+const illustrations = [
+  { image: '/images/illu-1.svg', alt: 'Façade rénovée et propre' },
+  { image: '/images/illu-2.svg', alt: 'Travaux de toiture' },
+  { image: '/images/illu-3.svg', alt: 'Nettoyage façade avant/après' },
+  { image: '/images/illu-4.svg', alt: 'Isolation extérieure' },
+  { image: '/images/illu-5.svg', alt: 'Intervention couverture' },
+  { image: '/images/illu-6.svg', alt: 'Finitions façade' }
+];
+
 const testimonials = [
   { author: 'Imen', date: 'Mai 2022', quote: 'Travail professionnel très bonne qualité.' },
   { author: 'Salah', date: 'Août 2022', quote: 'Entreprise très professionnelle, travail soigné et propre... je recommande vivement.' }
@@ -125,10 +114,10 @@ const testimonials = [
 
 module.exports = {
   company,
-  navigation,
   hero,
   companySection,
   serviceGroups,
   projects,
+  illustrations,
   testimonials
 };

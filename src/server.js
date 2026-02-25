@@ -3,14 +3,7 @@ const fs = require('fs/promises');
 const path = require('path');
 const { URL } = require('url');
 const querystring = require('querystring');
-const {
-  company,
-  hero,
-  companySection,
-  serviceGroups,
-  projects,
-  testimonials
-} = require('./data/site-content');
+const { company, hero, companySection, serviceGroups, projects, illustrations, testimonials } = require('./data/site-content');
 const { addMessage } = require('./utils/messages-store');
 
 const PORT = process.env.PORT || 3000;
@@ -29,6 +22,11 @@ function renderAddress() {
   return company.addressLines.map(line => `<p>${escapeHtml(line)}</p>`).join('');
 }
 
+function shortText(text) {
+  if (text.length <= 110) return text;
+  return `${text.slice(0, 107)}...`;
+}
+
 function pageTemplate({ flash = '', errors = [], formData = {} }) {
   const serviceOptions = serviceGroups
     .flatMap(group => group.items)
@@ -38,7 +36,6 @@ function pageTemplate({ flash = '', errors = [], formData = {} }) {
     )
     .join('');
 
-
   const serviceGroupsHtml = serviceGroups
     .map(
       group => `
@@ -47,11 +44,19 @@ function pageTemplate({ flash = '', errors = [], formData = {} }) {
         <div class="cards-grid ${group.items.length === 2 ? 'two-cols' : ''}">
           ${group.items
             .map(
-              item => `<article class="service-card"><h4>${escapeHtml(item.title)}</h4><p>${escapeHtml(item.description)}</p></article>`
+              item => `<article class="service-card"><h4>${escapeHtml(item.title)}</h4><p>${escapeHtml(shortText(item.description))}</p></article>`
             )
             .join('')}
         </div>
       </section>`
+    )
+    .join('');
+
+  const illustrationsHtml = illustrations
+    .map(
+      (item, i) => `<figure class="illustration-card reveal delay-${(i % 3) + 1}"><img src="${escapeHtml(item.image)}" alt="${escapeHtml(
+        item.alt
+      )}" loading="lazy" /></figure>`
     )
     .join('');
 
@@ -90,7 +95,7 @@ function pageTemplate({ flash = '', errors = [], formData = {} }) {
       <div class="hero-cards reveal delay-1">
         <article class="stat-card"><p class="stat-value">${escapeHtml(company.yearsExperience)}</p><p>ans d’expérience</p></article>
         <article class="stat-card"><p class="stat-value">60/95</p><p>Zones d’intervention</p></article>
-        <article class="stat-card"><p class="stat-value">Façades</p><p>Nettoyage, ravalement, rejointoiement</p></article>
+        <article class="stat-card"><p class="stat-value">Façades</p><p>Ravalement, nettoyage, rejointoiement</p></article>
         <article class="stat-card"><p class="stat-value">Toiture</p><p>Couverture, zinguerie, isolation</p></article>
       </div>
     </div>
@@ -105,27 +110,35 @@ function pageTemplate({ flash = '', errors = [], formData = {} }) {
     </div>
   </section>
 
-  <section id="societe" class="section container">
-    <div class="section-title reveal"><span>Société</span><h2>${escapeHtml(companySection.title)}</h2></div>
-    <div class="prose reveal delay-1">${companySection.paragraphs.map(text => `<p>${escapeHtml(text)}</p>`).join('')}</div>
+  <section id="galerie" class="section section-alt">
+    <div class="container">
+      <div class="section-title reveal"><span>Illustrations</span><h2>Plus de visuels, une lecture plus claire</h2></div>
+      <div class="illustrations-grid">${illustrationsHtml}</div>
+    </div>
   </section>
 
-  <section class="section section-alt">
+  <section id="societe" class="section container">
+    <div class="section-title reveal"><span>Société</span><h2>${escapeHtml(companySection.title)}</h2></div>
+    <div class="prose reveal delay-1"><p>${escapeHtml(companySection.summary)}</p></div>
+    <ul class="highlights reveal delay-2">${companySection.highlights.map(item => `<li>${escapeHtml(item)}</li>`).join('')}</ul>
+  </section>
+
+  <section class="section">
     <div class="container">
-      <div class="section-title reveal"><span>Prestations</span><h2>Tous les contenus de services du site</h2></div>
+      <div class="section-title reveal"><span>Prestations</span><h2>L’essentiel de nos services</h2></div>
       ${serviceGroupsHtml}
     </div>
   </section>
 
   <section id="realisations" class="section container">
-    <div class="section-title reveal"><span>Réalisations</span><h2>Un aperçu de nos chantiers</h2></div>
+    <div class="section-title reveal"><span>Réalisations</span><h2>Nos derniers chantiers</h2></div>
     <div class="projects-grid">
       ${projects
         .map(
           (project, i) => `<article class="project-card reveal delay-${(i % 3) + 1}"><img src="${escapeHtml(project.image)}" alt="${escapeHtml(
             project.title
           )}" loading="lazy" /><div class="project-content"><small>${escapeHtml(project.category)}</small><h3>${escapeHtml(project.title)}</h3><p>${escapeHtml(
-            project.description
+            shortText(project.description)
           )}</p></div></article>`
         )
         .join('')}
@@ -144,12 +157,11 @@ function pageTemplate({ flash = '', errors = [], formData = {} }) {
           )
           .join('')}
       </div>
-      <p class="contact-cta">Voir les avis Google MyBusiness pour plus de retours clients.</p>
     </div>
   </section>
 
   <section id="contact" class="section container">
-    <div class="section-title reveal"><span>Contact</span><h2>Demandez votre devis pour vos travaux à Beauvais</h2></div>
+    <div class="section-title reveal"><span>Contact</span><h2>Demandez votre devis</h2></div>
 
     <div class="contact-layout reveal delay-1">
       <aside class="contact-card">
@@ -182,7 +194,7 @@ function pageTemplate({ flash = '', errors = [], formData = {} }) {
 <footer class="footer">
   <div class="container footer-grid">
     <div><h4>${escapeHtml(company.name)}</h4><p>${escapeHtml(company.tagline)}</p></div>
-    <div><h5>Liens</h5><a href="#societe">Société</a><a href="#facades">Façades</a><a href="#toiture">Toiture</a><a href="#isolations">Isolations</a><a href="#realisations">Réalisations</a><a href="#avis">Avis</a><a href="#contact">Contact</a></div>
+    <div><h5>Liens</h5><a href="#societe">Société</a><a href="#facades">Façades</a><a href="#toiture">Toiture</a><a href="#isolations">Isolations</a><a href="#realisations">Réalisations</a><a href="#contact">Contact</a></div>
     <div><h5>Informations</h5><a href="https://www.les-facadiers-du-nord.fr/sitemap.php" target="_blank" rel="noreferrer">Plan du site</a><a href="https://www.les-facadiers-du-nord.fr/mentions.php" target="_blank" rel="noreferrer">Mentions légales</a></div>
   </div>
   <p class="copyright">© ${new Date().getFullYear()} ${escapeHtml(company.name)}. Tous droits réservés.</p>
