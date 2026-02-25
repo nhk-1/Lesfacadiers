@@ -152,8 +152,8 @@ function validateForm(formData) {
   return errors;
 }
 
-const server = http.createServer(async (req, res) => {
-  const url = new URL(req.url, `http://${req.headers.host}`);
+async function handler(req, res) {
+  const url = new URL(req.url, `http://${req.headers.host || 'localhost'}`);
 
   if (req.method === 'GET' && (url.pathname === '/' || url.pathname === '/index.html')) {
     const sent = url.searchParams.get('sent') === '1';
@@ -199,8 +199,20 @@ const server = http.createServer(async (req, res) => {
 
   res.writeHead(404, { 'Content-Type': 'text/plain; charset=utf-8' });
   return res.end('Page introuvable');
-});
+}
 
-server.listen(PORT, () => {
-  console.log(`Les Façadiers du Nord app running on http://localhost:${PORT}`);
-});
+if (require.main === module) {
+  const server = http.createServer((req, res) => {
+    handler(req, res).catch(error => {
+      console.error(error);
+      res.writeHead(500, { 'Content-Type': 'text/plain; charset=utf-8' });
+      res.end('Une erreur est survenue. Merci de réessayer.');
+    });
+  });
+
+  server.listen(PORT, () => {
+    console.log(`Les Façadiers du Nord app running on http://localhost:${PORT}`);
+  });
+}
+
+module.exports = { handler };
