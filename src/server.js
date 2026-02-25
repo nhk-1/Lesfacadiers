@@ -5,7 +5,6 @@ const { URL } = require('url');
 const querystring = require('querystring');
 const {
   company,
-  navigation,
   hero,
   companySection,
   serviceGroups,
@@ -39,9 +38,6 @@ function pageTemplate({ flash = '', errors = [], formData = {} }) {
     )
     .join('');
 
-  const navHtml = navigation
-    .map(link => `<a href="#${escapeHtml(link.id)}">${escapeHtml(link.label)}</a>`)
-    .join('');
 
   const serviceGroupsHtml = serviceGroups
     .map(
@@ -75,7 +71,7 @@ function pageTemplate({ flash = '', errors = [], formData = {} }) {
 <header class="header">
   <div class="container nav">
     <div class="logo">LFN</div>
-    <nav>${navHtml}<a href="#contact" class="btn-secondary">Devis gratuit</a></nav>
+    <nav class="top-nav"><a href="#societe">Société</a><a href="#realisations">Réalisations</a><a href="#contact" class="btn-secondary">Devis gratuit</a></nav>
   </div>
 </header>
 
@@ -97,6 +93,15 @@ function pageTemplate({ flash = '', errors = [], formData = {} }) {
         <article class="stat-card"><p class="stat-value">Façades</p><p>Nettoyage, ravalement, rejointoiement</p></article>
         <article class="stat-card"><p class="stat-value">Toiture</p><p>Couverture, zinguerie, isolation</p></article>
       </div>
+    </div>
+  </section>
+
+  <section class="section compact-links-section">
+    <div class="container compact-links reveal">
+      <a href="#facades">Façades</a>
+      <a href="#toiture">Toiture</a>
+      <a href="#isolations">Isolations</a>
+      <a href="#avis">Avis clients</a>
     </div>
   </section>
 
